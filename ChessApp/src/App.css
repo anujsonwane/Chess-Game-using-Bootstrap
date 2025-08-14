@@ -1,0 +1,126 @@
+.chess-newgame-btn {
+	margin-top: 12px;
+	padding: 8px 20px;
+	font-size: 1em;
+	font-weight: 600;
+	color: #fff;
+	background: linear-gradient(90deg, #4caf50 60%, #81c784 100%);
+	border: none;
+	border-radius: 8px;
+	cursor: pointer;
+	box-shadow: 0 2px 8px rgba(76,175,80,0.15);
+	transition: background 0.2s;
+}
+.chess-newgame-btn:hover {
+	background: linear-gradient(90deg, #388e3c 60%, #66bb6a 100%);
+}
+/* Chess App Modern UI */
+.chess-app-container {
+	max-width: 500px;
+	margin: 40px auto;
+	background: #dbdbe6;
+	border-radius: 16px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+	padding: 24px 16px 32px 16px;
+}
+
+.chess-title-bar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	background: linear-gradient(90deg, #3a3a5a 0%, #6a6a8a 100%);
+	color: #fff;
+	padding: 16px 24px;
+	border-radius: 12px;
+	margin-bottom: 24px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.chess-title-bar h1 {
+	font-size: 2em;
+	font-weight: 700;
+	margin: 0;
+	letter-spacing: 2px;
+}
+
+.chess-turn {
+	font-size: 1.1em;
+	font-weight: 500;
+	background: #fff2;
+	padding: 6px 16px;
+	border-radius: 8px;
+}
+
+.chess-board-wrapper {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 340px;
+}
+
+.chess-checkmate-msg {
+	text-align: center;
+	color: #d32f2f;
+	font-weight: bold;
+	font-size: 1.3em;
+	margin-bottom: 16px;
+	background: #fff0f0;
+	border-radius: 8px;
+	padding: 8px 0;
+}
+
+/* Chess board styles */
+.chess-board {
+	display: grid;
+	grid-template-columns: repeat(8, 40px);
+	grid-template-rows: repeat(8, 40px);
+	gap: 0;
+	border: 2px solid #333;
+	margin: 20px auto;
+	width: 320px;
+	height: 320px;
+}
+
+.chess-square {
+	width: 40px;
+	height: 40px;
+	box-sizing: border-box;
+}
+
+.chess-square.light {
+	background: #f0d9b5;
+}
+
+.chess-square.dark {
+	background: #b58863;
+}
+
+.chess-square.selected {
+	outline: 2px solid #2196f3;
+	box-shadow: 0 0 8px #2196f3;
+}
+
+.chess-square.valid-move {
+	position: relative;
+	background: linear-gradient(135deg, #b2ffb2 60%, #e0ffe0 100%);
+	box-shadow: 0 0 8px 2px #4caf50aa;
+}
+
+.chess-square.valid-move::after {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: rgba(76, 175, 80, 0.5);
+	pointer-events: none;
+}
+
+.chess-square.king-check {
+	box-shadow: 0 0 10px 3px #ff0000;
+	outline: 2px solid #ff0000;
+}
