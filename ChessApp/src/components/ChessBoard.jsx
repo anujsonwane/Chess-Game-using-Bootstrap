@@ -1,4 +1,12 @@
+  const handleResign = () => {
+    console.log('Resign button clicked. Current turn:', turn, 'Checkmate:', checkmate);
+    if (!checkmate) {
+      setCheckmate(turn === 'w' ? 'b' : 'w'); // The opponent wins
+    }
+  };
+
 import React, { useState } from "react";
+import { coordsToNotation, getMoveNotation, addMoveToHistory } from "../utils/moveHistory";
 import "../App.css";
 import { BOARD_SIZE, PIECES, findKing, isSquareAttacked, getValidMovesRaw, getPinnedPieces, getValidMoves as getValidMovesLogic } from "../utils/chessLogic";
 
@@ -16,10 +24,18 @@ function ChessBoard() {
   const [validMoves, setValidMoves] = useState([]);
   const [turn, setTurn] = useState('w'); // 'w' for white, 'b' for black
   const [checkmate, setCheckmate] = useState(null); // null or 'w'/'b'
+  const [moveHistory, setMoveHistory] = useState([]); // [{piece, from, to, capture, notation, time}]
 
   // Move validation for all pieces, restricts moves to resolve check and handle pins
   const getValidMoves = (row, col, piece) => {
-  return getValidMovesLogic(board, row, col, piece);
+    return getValidMovesLogic(board, row, col, piece);
+  };
+
+  const handleResign = () => {
+    console.log('Resign button clicked. Current turn:', turn, 'Checkmate:', checkmate);
+    if (!checkmate) {
+      setCheckmate(turn === 'w' ? 'b' : 'w'); // The opponent wins
+    }
   };
 
   const handleSquareClick = (row, col) => {
@@ -33,9 +49,23 @@ function ChessBoard() {
       // Check if clicked square is a valid move (empty or opponent)
       if (validMoves.some(([r, c]) => r === row && c === col)) {
         const newBoard = board.map(rowArr => rowArr.slice());
-        newBoard[row][col] = board[selected.row][selected.col];
+        const from = [selected.row, selected.col];
+        const to = [row, col];
+        const movingPiece = board[selected.row][selected.col];
+        const capture = !!board[row][col];
+        newBoard[row][col] = movingPiece;
         newBoard[selected.row][selected.col] = null;
         setBoard(newBoard);
+        // Move notation
+        const notation = getMoveNotation({ piece: movingPiece, from, to, capture });
+        setMoveHistory(prev => addMoveToHistory(prev, {
+          piece: movingPiece,
+          from,
+          to,
+          capture,
+          notation,
+          time: null // You can add timing logic if desired
+        }));
         const nextTurn = turn === 'w' ? 'b' : 'w';
         setTurn(nextTurn); // Switch turn after move
         // Check for checkmate after move
@@ -114,6 +144,7 @@ function ChessBoard() {
     setValidMoves([]);
     setTurn('w');
     setCheckmate(null);
+    setMoveHistory([]);
   };
 
   return (
@@ -122,16 +153,49 @@ function ChessBoard() {
         <h1>♚ Chess App</h1>
         <span className="chess-turn">Turn: {turn === 'w' ? 'White' : 'Black'}</span>
       </header>
-      {checkmate && (
-        <div className="chess-checkmate-msg">
-          Checkmate! {checkmate === 'w' ? 'White' : 'Black'} loses.<br />
-          <button className="chess-newgame-btn" onClick={handleNewGame}>Start New Game</button>
+      <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-start' }}>
+        <div className="chess-board-wrapper">
+          <div className="chess-board">
+            {renderSquares()}
+          </div>
         </div>
-      )}
-      <div className="chess-board-wrapper">
-        <div className="chess-board">
-          {renderSquares()}
+        <div className="chess-move-history" style={{ marginLeft: '32px', minWidth: '200px' }}>
+          <h3>Moves</h3>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr>
+                <th style={{ textAlign: 'center' }}>#</th>
+                <th style={{ textAlign: 'center' }}>White</th>
+                <th style={{ textAlign: 'center' }}>Black</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: Math.ceil(moveHistory.length / 2) }).map((_, idx) => {
+                const whiteMove = moveHistory[idx * 2];
+                const blackMove = moveHistory[idx * 2 + 1];
+                return (
+                  <tr key={idx}>
+                    <td style={{ textAlign: 'center' }}>{idx + 1}</td>
+                    <td style={{ textAlign: 'center' }}>{whiteMove ? whiteMove.notation : ''}</td>
+                    <td style={{ textAlign: 'center' }}>{blackMove ? blackMove.notation : ''}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+      </div>
+      <div style={{ marginTop: '16px', display: 'flex', gap: '12px' }}>
+        <button className="chess-resign-btn" onClick={handleResign} disabled={!!checkmate}>
+          Resign
+        </button>
+        {checkmate && (
+          <div className="chess-checkmate-msg">
+            {turn === 'w' ? 'White' : 'Black'} resigned.<br />
+            {checkmate === 'w' ? 'White' : 'Black'} wins!<br />
+            <button className="chess-newgame-btn" onClick={handleNewGame}>Start New Game</button>
+          </div>
+        )}
       </div>
     </div>
   );

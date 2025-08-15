@@ -1,3 +1,12 @@
+// Utility to detect if a move is en passant
+export function isEnPassantMove(piece, from, to, enPassantTarget) {
+  return (
+    piece[1] === 'P' &&
+    enPassantTarget &&
+    to[0] === enPassantTarget[0] &&
+    to[1] === enPassantTarget[1]
+  );
+}
 // Chess logic functions
 
 export const BOARD_SIZE = 8;
@@ -58,7 +67,7 @@ export function getValidMovesRaw(board, row, col, piece, forAttack = false) {
         const r = row + dir, c = col + dc;
         if (inBoard(r, c) && board[r][c] && board[r][c][0] !== color) moves.push([r, c]);
         if (forAttack && inBoard(r, c)) moves.push([r, c]);
-      }
+      } 
       break;
     }
     case 'N': {
