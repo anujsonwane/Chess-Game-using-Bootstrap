@@ -16,12 +16,30 @@
 }
 /* Chess App Modern UI */
 .chess-app-container {
-	max-width: 500px;
-	margin: 40px auto;
+	width: 100%;
+	height: 100%;
 	background: #dbdbe6;
 	border-radius: 16px;
 	box-shadow: 0 4px 24px rgba(0,0,0,0.12);
 	padding: 24px 16px 32px 16px;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+.chess-grid {
+	display: grid;
+	grid-template-columns: 1fr 280px;
+	gap: 24px;
+	align-items: start;
+	height: 100%;
+	min-height: 0;
+}
+
+.chess-sidepanel {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
 }
 
 .chess-title-bar {
@@ -55,7 +73,9 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	min-height: 340px;
+	min-height: 0;
+	flex: 1;
+	width: 100%;
 }
 
 .chess-checkmate-msg {
@@ -72,19 +92,54 @@
 /* Chess board styles */
 .chess-board {
 	display: grid;
-	grid-template-columns: repeat(8, 40px);
-	grid-template-rows: repeat(8, 40px);
+	grid-template-columns: repeat(8, 1fr);
+	grid-auto-rows: 1fr;
 	gap: 0;
 	border: 2px solid #333;
-	margin: 20px auto;
-	width: 320px;
-	height: 320px;
+	width: 80%;
+	max-width: 640px;
+	aspect-ratio: 1 / 1;
+	margin: 0 auto;
+	max-height: 80vh;
+}
+
+/* layout container for the whole application body */
+.app-body {
+	height: calc(100vh - 50px); /* subtract header height roughly */
+}
+
+.chat-panel {
+	width: 280px;
+	background: #f8f9fa;
+	border-left: 1px solid #dee2e6;
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+}
+
+/* ensure offcanvas menu is a bit wider and full-height */
+.offcanvas-start {
+	width: 240px; /* adjust as needed */
+}
+.offcanvas-body ul li a {
+	font-size: 1.1rem;
 }
 
 .chess-square {
-	width: 40px;
-	height: 40px;
+	width: 100%;
+	height: 100%;
 	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: min(4rem, 9vw);
+	line-height: 1;
+}
+
+.chess-piece {
+	width: 70%;
+	height: 70%;
+	object-fit: contain;
 }
 
 .chess-square.light {

@@ -8,9 +8,8 @@ export function coordsToNotation([row, col]) {
 }
 
 // Generates move notation (e.g., 'e2e4', 'Nf3', 'exd5')
-export function getMoveNotation({ piece, from, to, capture = false }) {
+export function getMoveNotation({ piece, to, capture = false }) {
   const pieceLetter = piece[1] === 'P' ? '' : piece[1];
-  const fromNotation = coordsToNotation(from);
   const toNotation = coordsToNotation(to);
   return (
     (pieceLetter ? pieceLetter : '') +

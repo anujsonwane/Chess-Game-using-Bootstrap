@@ -1,17 +1,23 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import './App.css';
+import Header from './components/Header';
 import ChessBoard from './components/ChessBoard';
+import Chat from './components/Chat';
 
 function App() {
-
   return (
-    <>
-      {/* <h1>Chess Board</h1> */}
-      <ChessBoard />
-    </>
-  )
+    <div className="d-flex flex-column vh-100">
+      <Header />
+
+      {/* body: chessboard in center, chat on right */}
+      <div className="app-body d-flex flex-grow-1">
+        <div className="flex-grow-1 d-flex justify-content-center align-items-center">
+          <ChessBoard />
+        </div>
+        <Chat />
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
